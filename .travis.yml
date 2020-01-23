@@ -1,0 +1,21 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t rkrongali/react-test -f ./client/Dockerfile.dev ./client
+
+scripts:
+  - docker run rkrongali/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t rkrongali/multi-client ./client
+  - docker build -t rkrongali/multi-nginx ./nginx
+  - docker build -t rkrongali/multi-server ./server
+  - docker build -t rkrongali/multi-worker ./worker
+  #login into the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push rkrongali/multi-client
+  - docker push rkrongali/multi-nginx
+  - docker push rkrongali/multi-server
+  - docker push rkrongali/multi-worker
