@@ -1,0 +1,9 @@
+{
+    "AWSEBDockerrunVersion": 2,
+    "containerDefinations": [
+        {
+            "name": "client",
+            "image": "rkrongali/multi-client"
+        }
+    ]
+}
